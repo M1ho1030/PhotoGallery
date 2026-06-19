@@ -1,9 +1,9 @@
 from django.contrib import admin
 
 # CustomUserをインポート
-from .models import CustomUser
+from .models import customUser
 
-class CustomUserAdmin(admin.ModelAdmin):
+class customUserAdmin(admin.ModelAdmin):
     '''管理ページのレコード一覧に表示するカラムを設定するクラス
     '''
 
@@ -13,4 +13,4 @@ class CustomUserAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'username')
 
 # Django管理サイトにCustomUser、CustomUserAdminを登録する
-admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(customUser, customUserAdmin)
