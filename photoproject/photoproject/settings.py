@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # photoアプリを追加する
     'photo.apps.PhotoConfig',
+    # accountsアプリを追加する
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
