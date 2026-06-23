@@ -33,7 +33,7 @@ class PhotoPost(models.Model):
     # Categoeryモデル(のtitle)とPhotoPostモデルを
     # 1対多の関係で結びつける
     # Categoryが親でPhotoPostが子の関係となる
-    Category = models.ForeignKey(
+    category = models.ForeignKey(
         Category,
         # フィールドのタイトル
         verbose_name='カテゴリ',
