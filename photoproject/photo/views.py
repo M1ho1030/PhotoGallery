@@ -60,3 +60,12 @@ class CreatePhotoView(CreateView):
         postdata.save()
         # 戻り値はスーパークラスのform_valid()の戻り値(HttpResponseRedirect)
         return super().form_valid(form)
+    
+class PostSuccessView(TemplateView):
+    '''投稿完了のビュー
+    
+    Attributes:
+        template_name: レンダリングするテンプレート
+    '''
+    # index.htmlをレンダリングする
+    template_name = 'post_success.html'
