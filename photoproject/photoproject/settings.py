@@ -141,3 +141,8 @@ EMAL_PORT = 587 # Gmailのポート番号
 EMAIL_HOST_USER = 'xxxx@gmail.com' # Gmailのアドレス
 EMAIL_HOST_PASSWORD = 'xxxxxxxxxxxxxxxxxxxx' # Gmailのアプリ用パスワード
 EMAIL_USE_TLS = True # SMPTサーバーと通信する際にTLS（セキュア）接続を使う
+
+# mediaフォルダの場所(BASE_DIR以下のmedia)を登録
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# mediaのURLを登録
+MEDIA_URL = '/media/'
