@@ -23,4 +23,8 @@ urlpatterns = [
     path('photos/<int:category>',
          views.CategoryView.as_view(),
          name = 'photos_マブ'),
+    
+    path('photos/<int:category>',
+         views.CategoryView.as_view(),
+         name = 'photos_エモ'),
 ]
