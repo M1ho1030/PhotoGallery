@@ -27,4 +27,11 @@ urlpatterns = [
     path('photos/<int:category>',
          views.CategoryView.as_view(),
          name = 'photos_エモ'),
+
+     # ユーザーの投稿一覧ページ
+     # photos/<ユーザーテーブルのid値>にマッチング
+     # <int:user>は辞書{user: id値(int)}としてCategoryViewに渡される
+     path('user-list/<int:user>',
+          views.UserView.as_view(),
+          name = 'user_list'),
 ]
