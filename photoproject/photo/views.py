@@ -13,6 +13,8 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 # modelsモジュールからモデルPhotoPostをインポート
 from .models import PhotoPost
+# django.views.genericからDetailViewをインポート
+from django.views.generic import DetailView
 
 class IndexView(ListView):
     '''トップページのビュー
@@ -132,3 +134,15 @@ class UserView(ListView):
             user=user_id).order_by('-posted_at')
         # クエリによって取得されたコードを返す
         return user_list
+    
+class DetailView(DetailView):
+    '''詳細ページのビュー
+    投稿記事の詳細を表示するのでDetailViewを継承する
+    Attributes:
+        templates_name: レンダリングするテンプレート
+        model: モデルのクラス
+    '''
+    # post.htmlをレンダリングする
+    template_name = 'detail.html'
+    # クラス変数のmodelにモデルBlogPostを設定
+    model = PhotoPost
