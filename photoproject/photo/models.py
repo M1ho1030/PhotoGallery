@@ -1,3 +1,5 @@
+import cv2
+from .utils import vhs_effect
 from django.db import models
 # accountsアプリのmodelsモジュールからCustomUserをインポート
 from accounts.models import customUser
@@ -55,6 +57,20 @@ class PhotoPost(models.Model):
         verbose_name='イメージ1', # フィールドのタイトル
         upload_to = 'photos' # MEDIA_ROOT以下のphotosにファイルを保存
         )
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+ 
+        # 画像があるときだけ加工
+        if self.image1:
+            img_path = self.image1.path
+            img = cv2.imread(img_path)
+ 
+            if img is not None:
+                result = vhs_effect(img)
+                # 上書き保存
+                cv2.imwrite(img_path, result)
+                
     # イメージのフィールド2
     image2 = models.ImageField(
         verbose_name='イメージ2', # フィールドのタイトル

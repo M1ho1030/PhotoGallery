@@ -132,12 +132,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # メール送信のためのクラスを設定
-EMAIL_BACKEND = 'django.core.mail.bockends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # メールサーバーへの接続設定
 DEFAULT_FROM_EMAIL = 'xxxxxxx@gmail.com' #メール送信元のアドレス
-EMAL_HOST = 'smtp.gmail.com' # GmailのSMTPサーバー
-EMAL_PORT = 587 # Gmailのポート番号
+EMAIL_HOST = 'smtp.gmail.com' # GmailのSMTPサーバー
+EMAIL_PORT = 587 # Gmailのポート番号
 EMAIL_HOST_USER = 'xxxx@gmail.com' # Gmailのアドレス
 EMAIL_HOST_PASSWORD = 'xxxxxxxxxxxxxxxxxxxx' # Gmailのアプリ用パスワード
 EMAIL_USE_TLS = True # SMPTサーバーと通信する際にTLS（セキュア）接続を使う

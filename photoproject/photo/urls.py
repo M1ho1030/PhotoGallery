@@ -28,6 +28,9 @@ urlpatterns = [
          views.CategoryView.as_view(),
          name = 'photos_エモ'),
 
+     path('', views.IndexView.as_view(), name='index'),
+     path('post/', views.CreatePhotoView.as_view(), name='post'),
+
      # ユーザーの投稿一覧ページ
      # photos/<ユーザーテーブルのid値>にマッチング
      # <int:user>は辞書{user: id値(int)}としてCategoryViewに渡される
@@ -47,3 +50,6 @@ urlpatterns = [
           views.PhotoDeleteView.as_view(),
           name = 'photo_delete'),
 ]
+
+from django.conf import settings
+from django.conf.urls.static import static
