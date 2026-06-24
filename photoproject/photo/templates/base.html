@@ -43,7 +43,109 @@
 
     
   </head>
+
   <body>
+    <audio id="bgm" loop>
+        <source src="{% static 'bgm.mp3' %}" type="audio/mpeg">
+    </audio>
+ 
+<!-- ✅ BGMボタン -->
+<button id="bgmToggle" style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+">
+    BGM ON
+</button>
+ 
+<script>
+const bgm = document.getElementById("bgm");
+const btn = document.getElementById("bgmToggle");
+ 
+// ===== 状態 =====
+let state = sessionStorage.getItem("bgmState") || "paused";
+ 
+// ===== 再生位置復元（最重要🔥）=====
+function restoreTime() {
+    const savedTime = sessionStorage.getItem("bgmTime");
+ 
+    if (!savedTime) return;
+ 
+    // ✅ 即適用 or 待機の両対応
+    if (bgm.readyState >= 1) {
+        bgm.currentTime = savedTime;
+    } else {
+        bgm.addEventListener("loadedmetadata", () => {
+            bgm.currentTime = savedTime;
+        }, { once: true });
+    }
+}
+ 
+// ✅ 実行
+restoreTime();
+ 
+// ===== 状態復元 =====
+if (state === "playing") {
+    setTimeout(() => {
+        bgm.play().catch(()=>{});
+        btn.textContent = "BGM OFF";
+    }, 200);
+}
+ 
+// ===== ボタン操作 =====
+btn.addEventListener("click", () => {
+    if (state === "playing") {
+        bgm.pause();
+        state = "paused";
+        btn.textContent = "BGM ON";
+    } else {
+        bgm.play().catch(()=>{});
+        state = "playing";
+        btn.textContent = "BGM OFF";
+    }
+    sessionStorage.setItem("bgmState", state);
+});
+ 
+// ===== 音量 =====
+bgm.volume = 5;
+ 
+// ===== 再生位置保存（ズレ補正付き🔥）=====
+bgm.addEventListener("timeupdate", () => {
+    sessionStorage.setItem("bgmTime", bgm.currentTime - 0.3);
+});
+ 
+// ✅ ページ移動時も保存
+window.addEventListener("beforeunload", () => {
+    sessionStorage.setItem("bgmTime", bgm.currentTime - 0.3);
+});
+ 
+// ✅ リンククリック時も即保存（確実化）
+document.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+        sessionStorage.setItem("bgmTime", bgm.currentTime);
+    });
+});
+</script>
+ 
+<!-- ===== 元のページ ===== -->
+<header>
+    <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-md-7 py-4">
+                    <h4>写真投稿サイト</h4>
+                    <p class="text-body-secondary"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+ 
+{% block content %}
+{% endblock %}
+ 
+</body>
     
 <header>
   <div class="collapse bg-dark" id="navbarHeader">
