@@ -20,6 +20,13 @@
                 <p>{{object.posted_at}}に投稿</p>
                 <!-- 1枚目の写真 -->
                 <p><img src="{{ object.image1.url }}"></img></p>
+
+                <!-- 投稿写真がログイン中のユーザーのものであれば削除ボタンを表示 -->
+                {% if request.user == object.user %}
+                <form method="POST">
+                <a href="{% url 'photo:photo_detail' object.pk %}"
+                    class="btn btn-primary my-2">削除する</a>
+                {% endif %}
             </div>
         </div>
     </div>

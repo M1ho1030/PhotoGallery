@@ -15,6 +15,8 @@ from django.contrib.auth.decorators import login_required
 from .models import PhotoPost
 # django.views.genericからDetailViewをインポート
 from django.views.generic import DetailView
+# django.views.genericからDeleteViewをインポート
+from django.views.generic import DeleteView
 
 class IndexView(ListView):
     '''トップページのビュー
@@ -146,3 +148,12 @@ class DetailView(DetailView):
     template_name = 'detail.html'
     # クラス変数のmodelにモデルBlogPostを設定
     model = PhotoPost
+
+class PhotoDeleteView(DeleteView):
+    model = PhotoPost
+    template_name = 'photo_delete.html'
+    success_url = reverse_lazy('photo:mypage')
+
+    def delete(self, request, *args, **kwargs):
+
+        return super().delete(request, *args, **kwargs)

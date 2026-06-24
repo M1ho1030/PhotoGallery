@@ -41,4 +41,9 @@ urlpatterns = [
      path('photo-detail/<int:pk>',
           views.DetailView.as_view(),
           name = 'photo_detail'),
+
+     # 投稿写真の削除
+     path('photo/<int:pk>/delete/',
+          views.PhotoDeleteView.as_view(),
+          name = 'photo_delete'),
 ]
