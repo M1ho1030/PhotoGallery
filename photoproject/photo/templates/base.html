@@ -44,35 +44,37 @@
     
   </head>
 
-  <body>
+
+<body>
     <audio id="bgm" loop>
         <source src="{% static 'bgm.mp3' %}" type="audio/mpeg">
     </audio>
- 
-<!-- ✅ BGMボタン -->
-<button id="bgmToggle" style="
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-">
-    BGM ON
-</button>
- 
+
+    <!-- ✅ BGMボタン -->
+    <button id="bgmToggle" style="
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+    ">
+        BGM ON
+    </button>
+
 <script>
 const bgm = document.getElementById("bgm");
 const btn = document.getElementById("bgmToggle");
- 
+
+// ===== 初期表示（チラつき防止）=====
+btn.textContent = "BGM ON";
+
 // ===== 状態 =====
 let state = sessionStorage.getItem("bgmState") || "paused";
- 
-// ===== 再生位置復元（最重要🔥）=====
+
+// ===== 再生位置復元 =====
 function restoreTime() {
     const savedTime = sessionStorage.getItem("bgmTime");
- 
     if (!savedTime) return;
- 
-    // ✅ 即適用 or 待機の両対応
+
     if (bgm.readyState >= 1) {
         bgm.currentTime = savedTime;
     } else {
@@ -81,20 +83,31 @@ function restoreTime() {
         }, { once: true });
     }
 }
- 
-// ✅ 実行
 restoreTime();
- 
-// ===== 状態復元 =====
-if (state === "playing") {
-    setTimeout(() => {
-        bgm.play().catch(()=>{});
-        btn.textContent = "BGM OFF";
-    }, 200);
-}
- 
-// ===== ボタン操作 =====
+
+// ===== ページ遷移フラグ =====
+document.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+        sessionStorage.setItem("isNavigating", "true");
+        sessionStorage.setItem("bgmTime", bgm.currentTime);
+    });
+});
+
+// ===== 再生位置保存 =====
+bgm.addEventListener("timeupdate", () => {
+    sessionStorage.setItem("bgmTime", bgm.currentTime - 0.3);
+});
+
+window.addEventListener("beforeunload", () => {
+    sessionStorage.setItem("bgmTime", bgm.currentTime - 0.3);
+});
+
+// ===== ボタン操作（ズレ防止版）=====
 btn.addEventListener("click", () => {
+
+    // 常に最新状態を取得
+    state = sessionStorage.getItem("bgmState") || "paused";
+
     if (state === "playing") {
         bgm.pause();
         state = "paused";
@@ -104,30 +117,47 @@ btn.addEventListener("click", () => {
         state = "playing";
         btn.textContent = "BGM OFF";
     }
+
     sessionStorage.setItem("bgmState", state);
 });
- 
+
 // ===== 音量 =====
-bgm.volume = 5;
- 
-// ===== 再生位置保存（ズレ補正付き🔥）=====
-bgm.addEventListener("timeupdate", () => {
-    sessionStorage.setItem("bgmTime", bgm.currentTime - 0.3);
-});
- 
-// ✅ ページ移動時も保存
-window.addEventListener("beforeunload", () => {
-    sessionStorage.setItem("bgmTime", bgm.currentTime - 0.3);
-});
- 
-// ✅ リンククリック時も即保存（確実化）
-document.querySelectorAll("a").forEach(link => {
-    link.addEventListener("click", () => {
-        sessionStorage.setItem("bgmTime", bgm.currentTime);
-    });
+bgm.volume = 0.5;
+
+// ===== 初期処理（最重要🔥）=====
+document.addEventListener("DOMContentLoaded", () => {
+
+    const navFlag = sessionStorage.getItem("isNavigating");
+
+    // フラグは1回使ったら削除
+    sessionStorage.removeItem("isNavigating");
+
+    const isReload = !navFlag;
+
+    if (isReload) {
+        // ✅ リロード時：必ず停止
+        state = "paused";
+        sessionStorage.setItem("bgmState", "paused");
+
+        bgm.pause();
+        btn.textContent = "BGM ON";
+
+    } else {
+        // ✅ 画面遷移：状態維持
+        state = sessionStorage.getItem("bgmState") || "paused";
+
+        if (state === "playing") {
+            setTimeout(() => {
+                bgm.play().catch(() => {});
+                btn.textContent = "BGM OFF";
+            }, 200);
+        } else {
+            btn.textContent = "BGM ON";
+        }
+    }
 });
 </script>
- 
+
 <!-- ===== 元のページ ===== -->
 <header>
     <div class="collapse bg-dark" id="navbarHeader">
@@ -141,20 +171,23 @@ document.querySelectorAll("a").forEach(link => {
         </div>
     </div>
 </header>
- 
+
 {% block content %}
 {% endblock %}
- 
+
 </body>
+
     
 <header>
   <div class="collapse bg-dark" id="navbarHeader">
     <div class="container">
       <div class="row">
-        <div class="col-sm-8 col-md-7 py-4">
+        <div class="col-sm-8 col-md-7 py-4"
+             style="color: white;">
           <!--ヘッダーのタイトルと本文-->
           <h4>写真投稿サイト</h4>
-          <p class="text-body-secondary">
+          <p class="text-body-secondary" 
+             style="color: white;" >
             誰でも参加できる写真投稿サイトです。
             自分で撮影した写真なら何でもオッケー！
             でも、カテゴリに属する写真になります。
@@ -211,7 +244,7 @@ document.querySelectorAll("a").forEach(link => {
 
 <footer class="text-muted py-5">
   <div class="container">
-    <p class="float-end mb-1"><a href="#">Back to top</a></p>
+    <p class="float-end mb-1"><a href="{% url 'photo:index' %}">Back to top</a></p>
     <!--フッターのテキストを任意のものに書き換え-->
     <p class="mb-1">
       Photo Gallery is &copy; onna, since 2026 

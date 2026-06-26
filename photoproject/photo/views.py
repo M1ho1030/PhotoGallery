@@ -24,7 +24,7 @@ class IndexView(ListView):
     # モデルBlogPostのオブジェクトにorder_by()を適用して、投稿日時を降順で並べる
     queryset = PhotoPost.objects.order_by('-posted_at')
     # 1ページに表示するレコードの件数
-    paginate_by = 12
+    paginate_by = 9
 
 # デコレーターにより、CreatePhotoViewへのアクセスはログインユーザーに限定される
 # ログイン状態でなければsettings.pyのLOGIN_URLにリダイレクトされる

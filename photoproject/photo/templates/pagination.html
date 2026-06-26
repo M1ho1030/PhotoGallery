@@ -1,42 +1,42 @@
+
 <!-- ページネーションのテンプレート -->
-<ul class="pagination"
-    style="justify-content:center">
-    <!-- 前ページを表示するアイコンとリンクの設定 -->
+<ul class="pagination" style="justify-content:center">
+
+    <!-- << 前ページ -->
     {% if page_obj.has_previous %}
-    <!-- 前ページが存在する場合はアイコンの[<<]を表示 -->
-    <li class="page-item">
-        <a class="page-link"
-            href="?page={{ page_obj.previous_page_number }}"
-            aria-label="Previous">
-         <span aria-hidden="true">&laquo;</span>
+    <li style="margin: 0 8px;">
+        <a href="?page={{ page_obj.previous_page_number }}"
+            style="font-size: 20px;">
+            &laquo;
         </a>
     </li>
     {% endif %}
-    <!-- すべてのページに番号を追加 -->
+
+    <!-- ページ番号（完全テキスト） -->
     {% for num in page_obj.paginator.page_range %}
-        <!-- 各ページのアイコンを出力 -->
+
         {% if page_obj.number == num %}
-        <!-- 処理中のページ番号が引き渡されたページ番号と一致する場合はページ番号のアイコンを表示 -->
-        <li class="page-item active">
-            <span class="page-link">{{ num }}</span>
-        </li>
-        <!-- ページ番号が引き渡されたページのページ番号と一致しない場合 -->
+            <!-- 今のページだけ強調 -->
+            <li style="margin: 0 8px; font-weight: bold;">
+                {{ num }}
+            </li>
         {% else %}
-        <!-- ページ番号のアイコン（アクティブ状態ではない）にリンクを設定して表示 -->
-        <li class="page-item">
-            <a class="page-link" href="?page-{{ num }}">{{ num }}</a>
-        </li>
+            <!-- 他ページ（ただのテキスト） -->
+            <li style="margin: 0 8px;">
+                {{ num }}
+            </li>
         {% endif %}
+
     {% endfor %}
-        <!-- 次のページへのリンクを示すアイコンの表示 -->
-        {% if page_obj.has_next %}
-        <!-- 次のページが存在する場合はリンクの[>>]が表示 -->
-        <li class="page-item">
-            <a class="page-link"
-                href="?page={{ page_obj.next_page_number }}"
-                aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
-        {% endif %}
+
+    <!-- >> 次のページ -->
+    {% if page_obj.has_next %}
+    <li style="margin: 0 8px;">
+        <a href="?page={{ page_obj.next_page_number }}"
+            style="font-size: 20px;">
+            &raquo;
+        </a>
+    </li>
+    {% endif %}
+
 </ul>
